@@ -30,9 +30,9 @@ class Game {
 
     animals = [ animal1,  animal2];
 
-   
-    //create a group for bush and grass
-  
+    // C38 TA
+    bush = new Group();
+   grass = new Group();
 
     // Adding fuel sprite in the game
     this.addSprites(bush, 4, bushImage, 0.02);
@@ -84,15 +84,16 @@ class Game {
         animals[index - 1].position.x = x;
         animals[index - 1].position.y = y;
 
-  
+        // C38  SA
         if (index === player.index) {
           stroke(10);
-          //fill the circle with color
-          //add the ellipse to create a focus for the player 
+          fill("red");
+          ellipse(x, y, 60, 60);
 
           this.handleBush(index);
           this.handleGrass(index);
 
+          // Changing camera position in y direction
          }
       }
 
@@ -107,14 +108,22 @@ class Game {
   }
 
   handleBush(index) {
-    // Write a overlap function  for animal and bush 
-       //remove the bush
+    // Adding fuel
+    animals[index - 1].overlap(bush, function(collector, collected) {
+      player.bush = 185;
+      //collected is the sprite in the group collectibles that triggered
+      //the event
+      collected.remove();
+    });
   }
 
   handleGrass(index) {
-    
+    animals[index - 1].overlap(grass, function(collector, collected) {
+      player.score += 21;
       player.update();
-    // Write a overlap function  for animal and grass
-       //remove the grass
+      //collected is the sprite in the group collectibles that triggered
+      //the event
+      collected.remove();
+    });
   }
 }
